@@ -51,3 +51,7 @@ export async function loginUser(data) {
     throw error;
   }
 }
+
+export function logoutUser(){
+  
+}
