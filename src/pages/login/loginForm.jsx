@@ -1,10 +1,30 @@
 import { useRef } from "react";
-import { NavLink } from "react-router-dom";
-import "./SigninForm.css";
+import { NavLink, useNavigate } from "react-router-dom";
 
-export function SigninForm({ onSubmitHandler, loading }) {
+import { toast } from "react-toastify";
+import { loginUser } from "../../api/users/users";
+
+import "./loginForm.css";
+
+export function LoginForm({ onSubmitHandler, loading }) {
   const emailRef = useRef();
   const passwordRef = useRef();
+  const navigate = useNavigate()
+
+  const checkUserCred=async(e)=>{
+    e.preventDefault();
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
+    try {
+      await loginUser({email,password});
+      toast.success("Login successful")
+      navigate("/")
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to Login")
+    }
+
+  }
 
   return (
     <div className="formContainer">
@@ -27,11 +47,11 @@ export function SigninForm({ onSubmitHandler, loading }) {
           placeholder="Enter Password"
         />
 
-        <button className="loginBtn">
+        <button className="loginBtn" onClick={checkUserCred}>
           {loading ? "..." : "Sign In"}
         </button>
 
-        <NavLink to="/signup" className="link">
+        <NavLink to="/register" className="link">
           <p className="switchText">Or SignUp instead</p>
         </NavLink>
       </form>
