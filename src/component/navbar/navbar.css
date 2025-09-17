@@ -6,8 +6,7 @@
     background-color: #6ecee6;
     border-bottom: 1px solid #e5e5e5;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    position: sticky;
-    /* stays on top when scrolling */
+    position: sticky; /* stays on top when scrolling */
     top: 0;
     z-index: 1000;
 }
@@ -20,8 +19,7 @@
     font-weight: bold;
     color: #333;
     gap: 0.5rem;
-    cursor: pointer;
-    /* space between text and image */
+    cursor: pointer; /* space between text and image */
 }
 
 .navbar-logo img {
@@ -29,7 +27,6 @@
     width: auto;
     object-fit: contain;
     border-radius: 20px;
-    
 }
 
 /* Links section */
@@ -37,8 +34,67 @@
     display: flex;
     gap: 2rem;
 }
-.navbar-links a{
+
+.navbar-links a {
     text-decoration: none;
     font-size: 1.2rem;
     font-weight: 500;
+    color: #333;
+    transition: color 0.2s ease, border-bottom 0.2s ease;
 }
+
+/* Active link styling */
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 2rem;
+    background-color: #6ecee6;
+    border-bottom: 1px solid #e5e5e5;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    position: sticky; /* stays on top when scrolling */
+    top: 0;
+    z-index: 1000;
+}
+
+/* Logo section */
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+    gap: 0.5rem;
+    cursor: pointer; /* space between text and image */
+}
+
+.navbar-logo img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    border-radius: 20px;
+}
+
+/* Links section */
+.navbar-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.navbar-links a {
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+    transition: color 0.2s ease, border-bottom 0.2s ease;
+}
+
+/* Active link styling */
+.navbar-links a.active-link {
+    color: #11e3ff; /* orange text */
+    font-weight: 600;
+    background-color: #ffe9d6; /* light orange background */
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+}
+

@@ -7,4 +7,11 @@
     text-align: center;
     top: 30%;
     width: 14rem;
+
+}
+
+.categoryConatiner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
