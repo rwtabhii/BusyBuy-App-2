@@ -3,20 +3,25 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 import { loginUser } from "../../api/users/users";
+import { useAuthValue } from "../../context/authContext/authContext";
+
 
 import "./loginForm.css";
 
 export function LoginForm({ onSubmitHandler, loading }) {
   const emailRef = useRef();
   const passwordRef = useRef();
+  const {setLogin} = useAuthValue();
   const navigate = useNavigate()
 
+  // check user Credential is correct or not 
   const checkUserCred=async(e)=>{
     e.preventDefault();
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
     try {
       await loginUser({email,password});
+      setLogin(true);
       toast.success("Login successful")
       navigate("/")
     } catch (error) {
