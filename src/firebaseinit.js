@@ -1,6 +1,5 @@
-// Import the functions you need from the SDKs you need
+// // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -21,5 +20,30 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-const analytics = getAnalytics(app);
 export  const db = getFirestore(app)
+
+
+
+// // too add the products in the firestore 
+// import { collection, doc, writeBatch, getDocs } from "firebase/firestore";
+// import { data } from "./component/product/product"; // your product array with id
+// const products = data;
+// export async function addProductsWithId(products) {
+//   try {
+//     const colRef = collection(db, "products");
+
+//     const batch = writeBatch(db);
+
+//     products.forEach((product) => {
+//       // Use product.id as the document ID
+//       const docRef = doc(colRef, product.id.toString());
+//       batch.set(docRef, product);
+//     });
+
+//     await batch.commit();
+//     console.log("All products added successfully with IDs!");
+//   } catch (err) {
+//     console.error("Error adding products:", err);
+//   }
+// }
+// addProductsWithId(products);

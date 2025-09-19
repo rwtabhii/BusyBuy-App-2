@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 export function ErrorPage() {
     const navigate = useNavigate()
   const error = useRouteError();
-  console.error(error);
+  console.log(error);
 
   return (
     <div style={{ textAlign: "center", padding: "2rem" }}>

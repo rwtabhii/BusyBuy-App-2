@@ -1,16 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import "./filterProduct.css"
+import { useProductValue } from "../../context/productContext/productContext";
 
 export function FilterProduct() {
     const [price, setPrice] = useState(75000);
     const [categories, setCategories] = useState({
-        mensFashion: false,
-        womensFashion: false,
-        jewelery: false,
-        electronics: false
+        mensCloth: false,
+        womensCloth: false,
+        jewellary: false,
+        electronic: false
     })
-    console.log(categories);
+    const {dispatchProduct} = useProductValue();
+    // console.log(categories);
+    // 🟢 this ref prevents dispatch on initial render
+    const didMount = useRef(false);
 
+    useEffect(() => {
+        if (didMount.current) {
+            dispatchProduct({
+                type: "FILTER_PRODUCT",
+                payload: { price, categories }
+            });
+        } else {
+            didMount.current = true;
+        }
+    }, [price, categories]);
 
     return (
         <div className="filter-container">
@@ -38,9 +52,9 @@ export function FilterProduct() {
                             type="checkbox"
                             id="mensFashion"
                             name="mensFashion"
-                            onChange={(e)=>{
-                                setCategories((prevCategory)=>(
-                                    {...prevCategory,mensFashion: e.target.checked}
+                            onChange={(e) => {
+                                setCategories((prevCategory) => (
+                                    { ...prevCategory, mensCloth: e.target.checked }
                                 ))
                             }}
                         />
@@ -51,9 +65,9 @@ export function FilterProduct() {
                             type="checkbox"
                             id="womensFashion"
                             name="womensFashion"
-                            onChange={(e)=>{
-                                setCategories((prevCategory)=>(
-                                    {...prevCategory,womensFashion: e.target.checked}
+                            onChange={(e) => {
+                                setCategories((prevCategory) => (
+                                    { ...prevCategory, womensCloth: e.target.checked }
                                 ))
                             }}
                         />
@@ -64,9 +78,9 @@ export function FilterProduct() {
                             type="checkbox"
                             id="jewelery"
                             name="jewelery"
-                            onChange={(e)=>{
-                                setCategories((prevCategory)=>(
-                                    {...prevCategory,jewelery: e.target.checked}
+                            onChange={(e) => {
+                                setCategories((prevCategory) => (
+                                    { ...prevCategory, jewellary: e.target.checked }
                                 ))
                             }}
                         />
@@ -77,9 +91,9 @@ export function FilterProduct() {
                             type="checkbox"
                             id="electronics"
                             name="electronics"
-                            onChange={(e)=>{
-                                setCategories((prevCategory)=>(
-                                    {...prevCategory,electronics: e.target.checked}
+                            onChange={(e) => {
+                                setCategories((prevCategory) => (
+                                    { ...prevCategory, electronic: e.target.checked }
                                 ))
                             }}
                         />

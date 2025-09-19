@@ -14,7 +14,7 @@ export function Navbar() {
     return (
         <div className="navbar-container">
             {/* Left side (Logo) */}
-            <div className="navbar-logo" onClick={() => navigate("/")}>
+            <div className="navbar-logo" onClick={() =>{ navigate("/");}}>
                 <img src={appLogo} alt="logo" /> BusyBuy
             </div>
 
