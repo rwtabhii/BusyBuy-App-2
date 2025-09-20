@@ -11,7 +11,7 @@ import "./loginForm.css";
 export function LoginForm({ onSubmitHandler, loading }) {
   const emailRef = useRef();
   const passwordRef = useRef();
-  const {setLogin} = useAuthValue();
+  const {setLogin,setUserDetail} = useAuthValue();
   const navigate = useNavigate()
 
   // check user Credential is correct or not 
@@ -20,8 +20,10 @@ export function LoginForm({ onSubmitHandler, loading }) {
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
     try {
-      await loginUser({email,password});
+      const user = await loginUser({email,password});
+      console.log(user);
       setLogin(true);
+      setUserDetail(user)
       toast.success("Login successful")
       navigate("/")
     } catch (error) {

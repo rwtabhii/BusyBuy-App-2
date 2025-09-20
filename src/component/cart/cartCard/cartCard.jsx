@@ -1,7 +1,7 @@
 import "./cartCard.css"
 
 export function CartCard({ item }) {
-  console.log(item)
+  console.log(item);
   return (
     <div className="cartCard">
       <div className="imageContainer">

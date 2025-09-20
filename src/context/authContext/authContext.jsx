@@ -9,9 +9,10 @@ const AuthContext = createContext();
 // 2. custom provider
 export function AuthProvider({ children }) {
     const [login, setLogin] = useState(false);
+    const [userDetail,setUserDetail] = useState();
 
     return (
-        <AuthContext.Provider value={{ login, setLogin }}>
+        <AuthContext.Provider value={{ login, setLogin,userDetail,setUserDetail }}>
             {children}
         </AuthContext.Provider>
     )
