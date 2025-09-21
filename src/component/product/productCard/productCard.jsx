@@ -13,12 +13,13 @@
     const addToCart=async(product)=>{
       try{
         const item = {
-          userId : userDetail.uId,
+          userId : userDetail.uid,
           title : product.title,
           quantity : 1,
           price : product.price,
           image : product.image
         }
+        console.log(item);
          await addCartItemApi(item);
          dispatchCart({type:"ADD_CART_ITEM",payload:item});
          toast.success("Product add successfully");

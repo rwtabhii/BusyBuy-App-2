@@ -1,10 +1,10 @@
-import { collection, getDocs,addDoc, query, updateDoc,deleteDoc, where } from "firebase/firestore";
+import { collection, getDocs,addDoc,doc, query, updateDoc,deleteDoc, where,increment } from "firebase/firestore";
 import {db} from "../../firebaseinit.js" // adjust path
 
 export async function getCartItemApi(userId) {
     try {
         const q = query(
-            collection(db, "carts"),
+            collection(db, "cart"),
             where("userId", "==", userId)
         );
 
@@ -14,11 +14,11 @@ export async function getCartItemApi(userId) {
             id: doc.id,
             ...doc.data(),
         }));
+        // console.log("user cart items",userCartItems)
 
         return userCartItems;
     } catch (err) {
         console.log("Error fetching cart items:", err);
-        return [];
     }
 }
 
@@ -32,28 +32,23 @@ export async function addCartItemApi(data) {
 
         console.log("Cart item added successfully!");
     } catch (error) {
-        console.error("Error setting cart item:", error);
+        console.log("Error setting cart item:", error);
     }
 }
 
-export async function updateCartItemApi(id, quantity) {
-    try {
-        const cartDocRef = doc(db, "cart", id); // id is the Firestore doc ID
-        await updateDoc(cartDocRef, { quantity: quantity });
-        console.log("Cart item quantity updated successfully!");
-    } catch (error) {
-        console.error("Error updating cart item quantity:", error);
-        throw error;
-    }
+export async function updateCartItemApi(itemId, type) {
+  const itemRef = doc(db, "cart", itemId);
+  const value = type === "increment" ? 1 : -1;
+  await updateDoc(itemRef, { quantity: increment(value) });
 }
 
-export async function removeCartItemApi(id) {
+export async function removeCartItemApi(item) {
     try {
-        const cartDocRef = doc(db, "cart", id); // id is the Firestore doc ID
+        const cartDocRef = doc(db, "cart", item.id); // id is the Firestore doc ID
         await deleteDoc(cartDocRef);
         console.log("Cart item removed successfully!");
     } catch (error) {
-        console.error("Error deleting cart item:", error);
+        console.log("Error deleting cart item:", error);
         throw error;
     }
 }
