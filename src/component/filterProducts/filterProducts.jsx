@@ -6,7 +6,7 @@ export function FilterProduct() {
     const [price, setPrice] = useState(75000);
     const [categories, setCategories] = useState({
         mensCloth: false,
-        womensCloth: false,
+        womansCloth: false,
         jewellary: false,
         electronic: false
     })
@@ -67,7 +67,7 @@ export function FilterProduct() {
                             name="womensFashion"
                             onChange={(e) => {
                                 setCategories((prevCategory) => (
-                                    { ...prevCategory, womensCloth: e.target.checked }
+                                    { ...prevCategory, womansCloth: e.target.checked }
                                 ))
                             }}
                         />

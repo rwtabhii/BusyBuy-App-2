@@ -6,6 +6,7 @@ import { getCartItemApi } from "../../api/cart/cart"
 import { useCartValue } from "../../context/cartContext/cartContext"
 import { useAuthValue } from "../../context/authContext/authContext"
 
+
 export function CartPage() {
     const { cart, dispatchCart } = useCartValue();
     const { userDetail } = useAuthValue()

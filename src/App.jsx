@@ -4,6 +4,7 @@ import './App.css'
 import { Navbar } from './component/navbar/navbar'
 import { ProductProvider } from './context/productContext/productContext'
 import { CartProvider } from './context/cartContext/cartContext'
+import { OrderProvider } from './context/orderContext/orderContext'
 
 
 
@@ -13,19 +14,21 @@ function App() {
     <div className="app">
       <ProductProvider>
         <CartProvider>
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
-          <Navbar />
-          <Outlet />
+          <OrderProvider>
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
+            <Navbar />
+            <Outlet />
+          </OrderProvider>
         </CartProvider>
       </ProductProvider>
     </div>

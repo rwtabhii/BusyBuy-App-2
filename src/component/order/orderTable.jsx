@@ -3,7 +3,7 @@ import "./orderTable.css"
 export function OrderTable({ order }) {
     return (
         <div className="orderTable">
-            <div className="order-date">Order on : {order.date}</div>
+            <div className="order-date">Order on : {order.createdAt.toDate().toLocaleDateString()}</div>
             {/* ordertable */}
             <table class="Order-Table">
                 <thead>
@@ -19,15 +19,15 @@ export function OrderTable({ order }) {
                         <tr key={item.id}>
                             <td>{item.title}</td>
                             <td>₹ {item.price}</td>
-                            <td>{item.qty}</td>
-                            <td>₹ {item.price * item.qty}</td>
+                            <td>{item.quantity}</td>
+                            <td>₹ {item.price * item.quantity}</td>
                         </tr>
                     ))}
                 </tbody>
                 <tfoot>
-                    <tr class="totalPrice">
+                    <tr className="totalPrice">
                         <td colspan="3"><strong>Total:</strong></td>
-                        <td><strong>{order.total}</strong></td>
+                        <td><strong>{order.totalAmount}</strong></td>
                     </tr>
                 </tfoot>
             </table>

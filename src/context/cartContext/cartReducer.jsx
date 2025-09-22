@@ -21,7 +21,7 @@ export function cartReducer(state, action) {
             );
         }
 
-        case "DECREMENT_QUANTITY":
+        case "DECREMENT_QUANTITY": {
             return state
                 .map((item) =>
                     item.id === action.payload
@@ -29,6 +29,10 @@ export function cartReducer(state, action) {
                         : item
                 )
                 .filter((item) => item.quantity > 0); // remove item if quantity is 0
+        }
+        case "CLEAR_CART": {
+            return []
+        }
         default:
             return state;
     }

@@ -52,3 +52,18 @@ export async function removeCartItemApi(item) {
         throw error;
     }
 }
+
+export async function clearCartApi(userId) {
+  try {
+    const q = query(collection(db, "cart"), where("userId", "==", userId));
+    const snapshot = await getDocs(q);
+
+    const promises = snapshot.docs.map((doc) => deleteDoc(doc.ref));
+    await Promise.all(promises);
+
+    return true;
+  } catch (error) {
+    console.error("Error clearing cart:", error);
+    throw error;
+  }
+}
