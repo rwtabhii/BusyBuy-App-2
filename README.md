@@ -1,39 +1,47 @@
 # 🛒 BuyBusy App
 
-**BuyBusy** is an e-commerce web application built with **React + Vite**. It allows users to browse products, sign up, log in, and manage their shopping cart. The app uses **Firebase** for authentication and database, and **React Context API** for state management.
+**BuyBusy** is a modern e-commerce web application built with **React + Vite**. It allows users to browse products, sign up, log in, manage their shopping cart, and place orders. The app uses **Firebase** for authentication and database, and **React Context API** for global state management.
 
 ---
 
 ## ⚡ Features
 
 - 🔐 **Authentication** – Sign up, login, and logout using **Firebase Auth** for secure user management.  
-- 🛍️ **Product Listing** – Display available products.  
+- 🛍️ **Product Listing** – Display available products with filtering and search functionality.  
 - 🛒 **Shopping Cart** – Add, remove, and update items in the cart.  
+- 📝 **Orders** – Place orders, view order history, and track purchases.  
 - 👤 **User Context** – Manage authentication state across the app using **React Context API**.  
 - 📦 **Cart Context** – Manage the cart globally without prop drilling.  
-- 🎨 **Modern Responsive UI** – Built with **React + CSS**.  
-- 🔔 **Notifications** – Display toast notifications for user actions like login, signup, or cart updates using **React Toastify**.  
+- 🎨 **Responsive UI** – Built with **React + CSS**, works on desktop and mobile.  
+- 🔔 **Notifications** – Display toast notifications for user actions using **React Toastify**.  
 
 ---
 
 ## 🛠 Installation
 
 1. **Clone the repository**
-
 ```bash
 git clone https://github.com/your-username/buybusy.git
 cd buybusy
+Install dependencies
 
-2. **Install dependencies**
-npm install 
+bash
+Copy code
+npm install
+Setup Firebase
 
-3. Setup Firebase
--Create a Firebase project at Firebase Console
--Enable Authentication (Email/Password)
--Enable Firestore Database in test mode
--Copy your Firebase config into firebaseinit.js in the src folder
+Create a Firebase project at Firebase Console
 
-example like :-
+Enable Authentication (Email/Password)
+
+Enable Firestore Database in test mode
+
+Copy your Firebase config into firebaseinit.js in the src folder
+
+Example firebaseinit.js:
+
+javascript
+Copy code
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
@@ -50,46 +58,55 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+Run the Project
 
-4. **Run the Project**
+bash
+Copy code
 npm run dev
+The app will be available at http://localhost:5173/ (default Vite port).
 
-## Project Structure
-
+📁 Project Structure
+php
+Copy code
 buybusy/
 ├─ public/
 │   └─ assets/               # Images, logos, icons
 ├─ src/
 │   ├─ api/                  # API functions (Firebase calls)
-│   │   └─ users/
-│   │       └─ users.js
-│   ├─ component/            # Reusable components
-│   │   └─ navbar/
-│   │       └─ navbar.jsx
+│   │   ├─ cart/             # Cart related APIs
+│   │   ├─ order/            # Order related APIs
+│   │   └─ products/         # Product APIs
+│   ├─ component/            # Reusable UI components
+│   │   ├─ navbar/
+│   │   ├─ product/
+│   │   ├─ cart/
+│   │   └─ order/
 │   ├─ context/              # React Context for global state
-│   │   ├─ userContext.jsx
-│   │   └─ cartContext.jsx
+│   │   ├─ authContext.jsx
+│   │   ├─ productContext.jsx
+│   │   ├─ cartContext.jsx
+│   │   └─ orderContext.jsx
 │   ├─ pages/                # Main pages
 │   │   ├─ home/
-│   │   │   └─ home.jsx
 │   │   ├─ login/
-│   │   │   └─ loginForm.jsx
-│   │   └─ register/
-│   │       └─ registerPage.jsx
+│   │   ├─ register/
+│   │   ├─ cart/
+│   │   └─ order/
 │   ├─ App.jsx               # Root layout (Navbar + Outlet + ToastContainer)
 │   ├─ main.jsx              # Entry point
 │   └─ index.css             # Global styles
 ├─ package.json
 └─ vite.config.js
+⚡ Technologies Used
+Frontend: React, Vite, CSS
 
+State Management: React Context API, useReducer
 
- ## ⚡ Technologies Used
+Backend/Database: Firebase Auth + Firestore
 
--Frontend: React, Vite, CSS
--State Management: React Context API
--Backend/Database: Firebase Auth + Firestore
--Notifications: React Toast
+Notifications: React Toastify
 
-## 📞 Contact
-email : devabhishekrawat@gmail.com
-github : 
+📞 Contact
+Email: devabhishekrawat@gmail.com
+
+GitHub: https://github.com/your-username
