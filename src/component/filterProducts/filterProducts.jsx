@@ -1,6 +1,7 @@
 import { useEffect, useState,useRef } from "react";
 import "./filterProduct.css"
-import { useProductValue } from "../../context/productContext/productContext";
+import { useDispatch } from "react-redux";
+import { filterProduct } from "../../redux/productReducer/productReducer";
 
 export function FilterProduct() {
     const [price, setPrice] = useState(75000);
@@ -10,17 +11,14 @@ export function FilterProduct() {
         jewellary: false,
         electronic: false
     })
-    const {dispatchProduct} = useProductValue();
+    const dispatch = useDispatch()
     // console.log(categories);
     // 🟢 this ref prevents dispatch on initial render
     const didMount = useRef(false);
 
     useEffect(() => {
         if (didMount.current) {
-            dispatchProduct({
-                type: "FILTER_PRODUCT",
-                payload: { price, categories }
-            });
+            dispatch(filterProduct({price,categories}))
         } else {
             didMount.current = true;
         }

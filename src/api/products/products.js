@@ -1,7 +1,7 @@
 import { db } from "../../firebaseinit";
 import { getDocs, addDoc, doc, collection } from "firebase/firestore";
 
-export async function getProduct() {
+export async function getProductApi() {
     try {
         const querySnapshot = await getDocs(collection(db,"products"));
         const products = querySnapshot.docs.map(doc => ({

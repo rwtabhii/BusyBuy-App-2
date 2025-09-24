@@ -81,11 +81,11 @@ buybusy/
 │   │   ├─ product/
 │   │   ├─ cart/
 │   │   └─ order/
-│   ├─ context/              # React Context for global state
-│   │   ├─ authContext.jsx
-│   │   ├─ productContext.jsx
-│   │   ├─ cartContext.jsx
-│   │   └─ orderContext.jsx
+│   ├─ redux/              # React Context for global state
+│   │   ├─ authReducer
+│   │   ├─ productReducer
+│   │   ├─ cartReducer
+│   │   └─ orderReducer
 │   ├─ pages/                # Main pages
 │   │   ├─ home/
 │   │   ├─ login/

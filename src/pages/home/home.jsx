@@ -4,21 +4,22 @@ import { GridLoader } from "react-spinners";
 import { FilterProduct } from "../../component/filterProducts/filterProducts";
 import { ProductList } from "../../component/product/productList/productList";
 import "./home.css";
-import { getProduct } from "../../api/products/products";
-import { useProductValue } from "../../context/productContext/productContext";
+import { getProductApi } from "../../api/products/products";
+import { useDispatch } from "react-redux";
+import { getProduct } from "../../redux/productReducer/productReducer";
 
 export function Home() {
-  const { dispatchProduct } = useProductValue();
+  const dispatch = useDispatch()
   const [loading, setLoading] = useState(true);
 
   // ✅ Fetch products on initial render
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const productsData = await getProduct();
+        const productsData = await getProductApi();
 
         // Dispatch to context → updates global product state
-        dispatchProduct({ type: "GET_PRODUCT", payload: productsData });
+        dispatch(getProduct(productsData))
       } catch (err) {
         console.error("❌ Failed to fetch products:", err);
       } finally {
@@ -28,7 +29,7 @@ export function Home() {
     }
 
     fetchProducts();
-  }, [dispatchProduct]); // dependency for safety
+  }, []); // dependency for safety
 
   return (
     <div className="homecontainer">
