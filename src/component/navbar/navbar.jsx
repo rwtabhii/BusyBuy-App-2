@@ -1,14 +1,17 @@
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import "./navbar.css";
 import appLogo from "../../assets/applogo.png";
-import { useAuthValue } from "../../context/authContext/authContext";
+import { useDispatch, useSelector } from "react-redux";
+import { authSelector } from "../../redux/authReducer/authReducer";
+import { setLogin } from "../../redux/authReducer/authReducer";
 
 export function Navbar() {
     const navigate = useNavigate();
-    const { login, setLogin } = useAuthValue();
+    const {login} = useSelector(authSelector)
+    const dispatch = useDispatch()
 
     const userLogout = () => {
-        setLogin(false);
+        dispatch(setLogin(false));
     };
 
     return (

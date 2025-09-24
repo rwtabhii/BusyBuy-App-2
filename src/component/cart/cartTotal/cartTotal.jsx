@@ -2,13 +2,14 @@ import "./cartTotal.css"
 import { useCartValue } from "../../../context/cartContext/cartContext"
 import { addOrderApi } from "../../../api/order/orderApi";
 import { toast } from "react-toastify";
-import { useAuthValue } from "../../../context/authContext/authContext";
 import { clearCartApi } from "../../../api/cart/cart";
+import { useSelector } from "react-redux";
+import { authSelector } from "../../../redux/authReducer/authReducer";
  
 
 export function CartTotal() {
   const { cart, dispatchCart } = useCartValue();
-  const { userDetail } = useAuthValue()
+  const { userDetail } = useSelector(authSelector)
   // Calculate total price
   const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 

@@ -1,12 +1,13 @@
-  import { useAuthValue } from "../../../context/authContext/authContext";
   import { useNavigate } from "react-router-dom";
   import { useCartValue } from "../../../context/cartContext/cartContext";
   import { addCartItemApi } from "../../../api/cart/cart.js";
   import { toast } from "react-toastify";
   import "./productCard.css"
+import { useSelector } from "react-redux";
+import { authSelector } from "../../../redux/authReducer/authReducer.jsx";
 
   export function ProductCard({product}){
-    const {login,userDetail} = useAuthValue()
+    const {login,userDetail} = useSelector(authSelector)
     const navigate = useNavigate();
     const {dispatchCart} = useCartValue();
 

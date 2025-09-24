@@ -1,41 +1,59 @@
 import { useEffect, useState } from "react";
 import { GridLoader } from "react-spinners";
 import { OrderList } from "../../component/order/orderList/orderList";
-import { useOrderValue } from "../../context/orderContext/orderContext"
-import "./orderPage.css"
+import { useOrderValue } from "../../context/orderContext/orderContext";
 import { getOrderApi } from "../../api/order/orderApi";
-import { useAuthValue } from "../../context/authContext/authContext";
-
-
+import "./orderPage.css";
+import { useSelector } from "react-redux";
+import { authSelector } from "../../redux/authReducer/authReducer";
 
 export function OrderPage() {
-    const { setOrder } = useOrderValue();
-    const { userDetail } = useAuthValue()
-    const [loding, setLoding] = useState(true)
+  // Context → provides setOrder method for global order state
+  const { setOrder } = useOrderValue();
 
-    const fetchOrder = async () => {
-        try {
-            const allOrder = await getOrderApi(userDetail.uid);
-            console.log(allOrder);
-            setOrder(allOrder);
-            setLoding(false)
-        } catch (error) {
-            console.log(error);
-        }
+  // selector → provides logged-in user details
+  const {userDetail} = useSelector(authSelector)
+
+  // Local state → track loading spinner
+  const [loading, setLoading] = useState(true);
+
+  // ✅ Fetch all orders for the logged-in user
+  const fetchOrder = async () => {
+    try {
+      const allOrder = await getOrderApi(userDetail?.uid);
+      console.log("Fetched Orders:", allOrder);
+
+      // Save orders in global state (OrderContext)
+      setOrder(allOrder);
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      setLoading(false);
     }
-    useEffect(() => {
-        fetchOrder();
-    }, [])
+  };
 
+  // ✅ Run once on mount
+  useEffect(() => {
+    if (userDetail?.uid) {
+      fetchOrder();
+    }
+  }, [userDetail?.uid]); // dependency ensures it runs when userDetail is available
 
-    return (<>
-        {loding ?
-            (<div className="spinner-container" >
-                <GridLoader color="#36d7b7" loading={loding} size={20} />
-            </div>) : (<div className="order-container">
-                <div className="heading">Your Orders :</div>
-                <OrderList />
-            </div>)
-        }
-    </>)
+  return (
+    <>
+      {loading ? (
+        // Loading spinner while fetching data
+        <div className="spinner-container">
+          <GridLoader color="#36d7b7" loading={loading} size={20} />
+        </div>
+      ) : (
+        // Order list once data is fetched
+        <div className="order-container">
+          <div className="heading">Your Orders :</div>
+          <OrderList />
+        </div>
+      )}
+    </>
+  );
 }

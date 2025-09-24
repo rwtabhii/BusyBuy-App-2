@@ -1,6 +1,6 @@
 # 🛒 BuyBusy App
 
-**BuyBusy** is a modern e-commerce web application built with **React + Vite**. It allows users to browse products, sign up, log in, manage their shopping cart, and place orders. The app uses **Firebase** for authentication and database, and **React Context API** for global state management.
+**BuyBusy** is a modern e-commerce web application built with **React + Vite**. It allows users to browse products, sign up, log in, manage their shopping cart, and place orders. The app uses **Firebase** for authentication and database, and **React Redux Toolkit** for global state management.
 
 ---
 
@@ -109,4 +109,4 @@ Notifications: React Toastify
 📞 Contact
 Email: devabhishekrawat@gmail.com
 
-GitHub: https://github.com/your-username
+GitHub: https://github.com/rwtabhii

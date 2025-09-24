@@ -1,52 +1,65 @@
-import { GridLoader } from "react-spinners"
-import { CartTotal } from "../../component/cart/cartTotal/cartTotal"
-import { CartCard } from "../../component/cart/cartCard/cartCard"
-import "./cart.css"
-import { useEffect, useState } from "react"
-import { getCartItemApi } from "../../api/cart/cart"
-import { useCartValue } from "../../context/cartContext/cartContext"
-import { useAuthValue } from "../../context/authContext/authContext"
+import { useEffect, useState } from "react";
+import { GridLoader } from "react-spinners";
+
+import { CartTotal } from "../../component/cart/cartTotal/cartTotal";
+import { CartCard } from "../../component/cart/cartCard/cartCard";
+import "./cart.css";
+import { getCartItemApi } from "../../api/cart/cart";
+import { useCartValue } from "../../context/cartContext/cartContext";
+import { useSelector } from "react-redux";
+import { authSelector } from "../../redux/authReducer/authReducer";
 
 
 export function CartPage() {
-    const { cart, dispatchCart } = useCartValue();
-    const { userDetail } = useAuthValue()
-    const [loding,setLoding] = useState(true)
-    useEffect(() => {
-        const fetchCart = async () => {
-            try {
-                // console.log(userDetail.uid);
-                const cartItems = await getCartItemApi(userDetail.uid);
-                dispatchCart({ type: "GET_CART_ITEM", payload: cartItems })
-                setLoding(false);
-                //  console.log("fetch cart item :", cartItems)
-            }
-            catch (error) {
-                console.log(error);
-            }
-        }
-        fetchCart();
-    }, [])
-    return (<>
+  const { cart, dispatchCart } = useCartValue();
+  const {userDetail} = useSelector(authSelector)
+  const [loading, setLoading] = useState(true);
 
-        {
-            loding ? (
-                <div className="spinner-container" >
-                    <GridLoader color="#36d7b7" loading={loding} size={20} />
-                </div>
-            )
-                :
-                (<div className="cart-Container">
-                    <CartTotal />
-                    <div className="cartList">
-                        {cart.length > 0 ? cart.map((cartitem) => (
-                            <CartCard key={cartitem.id} item={cartitem} />
-                        ))
-                            : <h2>Your Cart is empty</h2>
-                        }
-                    </div>
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        if (!userDetail?.uid) return; // ✅ safety check
 
-                </div>)
-        }
-    </>)
+        // Fetch user cart items from Firestore
+        const cartItems = await getCartItemApi(userDetail.uid);
+
+        // Update global cart state
+        dispatchCart({ type: "GET_CART_ITEM", payload: cartItems });
+      } catch (error) {
+        console.error("❌ Failed to fetch cart items:", error);
+      } finally {
+        // ✅ Stop loader regardless of success/error
+        setLoading(false);
+      }
+    };
+
+    fetchCart();
+  }, [userDetail?.uid, dispatchCart]); // dependencies
+
+  return (
+    <>
+      {loading ? (
+        // 🔄 Show spinner while fetching cart
+        <div className="spinner-container">
+          <GridLoader color="#36d7b7" loading={loading} size={20} />
+        </div>
+      ) : (
+        <div className="cart-Container">
+          {/* 🛒 Cart Summary */}
+          <CartTotal />
+
+          {/* 🛍️ Cart Items */}
+          <div className="cartList">
+            {cart.length > 0 ? (
+              cart.map((cartItem) => (
+                <CartCard key={cartItem.id} item={cartItem} />
+              ))
+            ) : (
+              <h2>Your Cart is Empty 🛒</h2>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  );
 }

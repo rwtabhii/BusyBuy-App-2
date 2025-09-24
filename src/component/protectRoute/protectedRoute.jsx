@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { useAuthValue } from "../../context/authContext/authContext";
+import { authSelector } from "../../redux/authReducer/authReducer";
+import { useSelector } from "react-redux";
 
 
 export function ProtectRoute({ children }) {
-    const{login} = useAuthValue()
+    const{login} = useSelector(authSelector)
     const navigate = useNavigate()
     if (!login){
         return navigate("/")
