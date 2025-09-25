@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { GridLoader } from "react-spinners";
 import { OrderList } from "../../component/order/orderList/orderList";
-import { useOrderValue } from "../../context/orderContext/orderContext";
 import { getOrderApi } from "../../api/order/orderApi";
 import "./orderPage.css";
 import { useSelector } from "react-redux";
 import { authSelector } from "../../redux/authReducer/authReducer";
+import { setOrders } from "../../redux/orderReducer/orderReducer";
 
 export function OrderPage() {
-  // Context → provides setOrder method for global order state
-  const { setOrder } = useOrderValue();
+  // reduxDispatcher → provides setOrder method for global order state
+const dispatch = useDispatch()
 
   // selector → provides logged-in user details
   const {userDetail} = useSelector(authSelector)
@@ -23,8 +24,8 @@ export function OrderPage() {
       const allOrder = await getOrderApi(userDetail?.uid);
       console.log("Fetched Orders:", allOrder);
 
-      // Save orders in global state (OrderContext)
-      setOrder(allOrder);
+      // Save orders in global state
+     dispatch(setOrders(allOrder))
 
       setLoading(false);
     } catch (error) {

@@ -1,11 +1,13 @@
+import { useSelector } from "react-redux"
 import { OrderTable } from "../orderTable"
-import { useOrderValue } from "../../../context/orderContext/orderContext"
+import { orderSelector } from "../../../redux/orderReducer/orderReducer"
+
 
 
 
 
 export function OrderList() {
-    const { order } = useOrderValue()
+   const order = useSelector(orderSelector)
     return (<>        {
         order?.map((o) => (
             <OrderTable key={o.id} order={o} />
