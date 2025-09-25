@@ -1,14 +1,17 @@
 import "./cartTotal.css"
-import { useCartValue } from "../../../context/cartContext/cartContext"
+
 import { addOrderApi } from "../../../api/order/orderApi";
 import { toast } from "react-toastify";
 import { clearCartApi } from "../../../api/cart/cart";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { authSelector } from "../../../redux/authReducer/authReducer";
- 
+import { cartSelector } from "../../../redux/cartReducer/cartReducer";
+import { clearCart } from "../../../redux/cartReducer/cartReducer";
 
 export function CartTotal() {
-  const { cart, dispatchCart } = useCartValue();
+  const dispatch = useDispatch()
+  const cart = useSelector(cartSelector)
   const { userDetail } = useSelector(authSelector)
   // Calculate total price
   const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -17,7 +20,7 @@ export function CartTotal() {
     try {
       await addOrderApi(data, userDetail.uid);
       await clearCartApi(userDetail.uid);
-      dispatchCart({ type: "CLEAR_CART" })
+      dispatch(clearCart())
       toast.success("Order Competed");
     }
     catch (error) {

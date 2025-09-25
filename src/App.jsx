@@ -2,7 +2,6 @@ import { Outlet } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import './App.css'
 import { Navbar } from './component/navbar/navbar'
-import { CartProvider } from './context/cartContext/cartContext'
 import { OrderProvider } from './context/orderContext/orderContext'
 
 function App() {
@@ -13,7 +12,6 @@ function App() {
           - CartProvider → manages shopping cart state globally
           - OrderProvider → manages user orders globally
       */}
-        <CartProvider>
           <OrderProvider>
 
             {/* ✅ Toast notifications (success, error, info, etc.) */}
@@ -36,7 +34,6 @@ function App() {
             <Outlet />
 
           </OrderProvider>
-        </CartProvider>
     </div>
   )
 }

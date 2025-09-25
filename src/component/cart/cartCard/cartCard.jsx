@@ -1,24 +1,26 @@
+import { useDispatch, useSelector } from "react-redux";
 import { removeCartItemApi, updateCartItemApi } from "../../../api/cart/cart";
-import { useCartValue } from "../../../context/cartContext/cartContext";
 import "./cartCard.css"
+import { cartSelector, decrementQuantity, incrementQuantity, removeCartItem } from "../../../redux/cartReducer/cartReducer";
 
 export function CartCard({ item }) {
-  const { cart, dispatchCart } = useCartValue()
+  const dispatch = useDispatch();
+  const cart = useSelector(cartSelector)
   const removeFromCart = async (item) => {
     // console.log("item is :",item);
     await removeCartItemApi(item);
-    dispatchCart({ type: "REMOVE_CART_ITEM", payload: item });
+    dispatch(removeCartItem(item))
   }
   const updateQuantity = async (type) => {
     if (type === "increment") {
-      dispatchCart({ type: "INCREMENT_QUANTITY", payload: item.id });
+      dispatch(incrementQuantity(item.id))
       await updateCartItemApi(item.id, "increment");
     } else if (type === "decrement") {
       if (item.quantity === 1) {
-        dispatchCart({ type: "REMOVE_CART_ITEM", payload: item });
+        dispatch(removeCartItem(item))
         await removeCartItemApi(item);
       } else {
-        dispatchCart({ type: "DECREMENT_QUANTITY", payload: item.id });
+       dispatch(decrementQuantity(item.id))
         await updateCartItemApi(item.id, "decrement");
       }
     }

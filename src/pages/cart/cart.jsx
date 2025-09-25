@@ -5,13 +5,15 @@ import { CartTotal } from "../../component/cart/cartTotal/cartTotal";
 import { CartCard } from "../../component/cart/cartCard/cartCard";
 import "./cart.css";
 import { getCartItemApi } from "../../api/cart/cart";
-import { useCartValue } from "../../context/cartContext/cartContext";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authSelector } from "../../redux/authReducer/authReducer";
+import { cartReducer, cartSelector } from "../../redux/cartReducer/cartReducer";
+import { getCartItem } from "../../redux/cartReducer/cartReducer";
 
 
 export function CartPage() {
-  const { cart, dispatchCart } = useCartValue();
+  const dispatch = useDispatch();
+  const  cart   = useSelector(cartSelector)
   const {userDetail} = useSelector(authSelector)
   const [loading, setLoading] = useState(true);
 
@@ -24,7 +26,7 @@ export function CartPage() {
         const cartItems = await getCartItemApi(userDetail.uid);
 
         // Update global cart state
-        dispatchCart({ type: "GET_CART_ITEM", payload: cartItems });
+        dispatch(getCartItem(cartItems));
       } catch (error) {
         console.error("❌ Failed to fetch cart items:", error);
       } finally {
@@ -34,7 +36,7 @@ export function CartPage() {
     };
 
     fetchCart();
-  }, [userDetail?.uid, dispatchCart]); // dependencies
+  }, [userDetail?.uid]); // dependencies
 
   return (
     <>
