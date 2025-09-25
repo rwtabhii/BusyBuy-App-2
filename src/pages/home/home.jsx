@@ -6,7 +6,7 @@ import { ProductList } from "../../component/product/productList/productList";
 import "./home.css";
 import { getProductApi } from "../../api/products/products";
 import { useDispatch } from "react-redux";
-import { getProduct } from "../../redux/productReducer/productReducer";
+import { filterProduct, getProduct } from "../../redux/productReducer/productReducer";
 
 export function Home() {
   const dispatch = useDispatch()
@@ -47,10 +47,7 @@ export function Home() {
               placeholder="Search"
               className="searchInput"
               onChange={(e) =>
-                dispatchProduct({
-                  type: "FILTER_PRODUCT",
-                  payload: { search: e.target.value },
-                })
+                dispatch(filterProduct({search : e.target.value}))
               }
             />
           </div>

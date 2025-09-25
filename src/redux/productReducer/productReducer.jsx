@@ -4,7 +4,13 @@ const initialState = {
   allProducts: [],
   showProducts: [],
   searchProducts: [],
-  previousSearchProducts: [], // keep previous for search reset
+  previousSearchProducts: [],
+   filterObj: {
+    price: 75000,
+    categories: {}, // {electronics: true, fashion: false}
+    search: "",
+  },
+// keep previous for search reset
 };
 
 const productSlice = createSlice({
@@ -20,13 +26,15 @@ const productSlice = createSlice({
       state.allProducts.push(action.payload);
       state.showProducts.push(action.payload);
     },
-    filterProduct: (state, action) => {
-      const { price, categories, search } = action.payload;
+     filterProduct: (state, action) => {
+      // merge new filter values into filterObj
+      state.filterObj = { ...state.filterObj, ...action.payload };
+
+      const { price, categories, search } = state.filterObj;
       let filtered = [...state.allProducts];
-      let storeFilterItem = [...state.allProducts];
 
       // filter by price
-      if (price !== undefined) {
+      if (price !== null && price !== undefined) {
         filtered = filtered.filter((p) => p.price <= price);
       }
 
@@ -35,23 +43,15 @@ const productSlice = createSlice({
         (c) => categories[c] === true
       );
       if (activeCategories.length > 0) {
-        filtered = filtered.filter((p) =>
-          activeCategories.includes(p.category)
-        );
-        storeFilterItem = [...filtered];
+        filtered = filtered.filter((p) => activeCategories.includes(p.category));
       }
 
-      // filter by search query
+      // filter by search
       if (search && search.trim() !== "") {
         const query = search.toLowerCase().trim();
-        const result = storeFilterItem.filter((p) =>
+        filtered = filtered.filter((p) =>
           p.title.toLowerCase().includes(query)
         );
-        if (result.length === 0) {
-          filtered = [];
-        } else {
-          filtered = result;
-        }
       }
 
       state.showProducts = filtered;
