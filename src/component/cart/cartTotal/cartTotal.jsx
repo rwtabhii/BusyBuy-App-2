@@ -6,12 +6,12 @@ import { clearCartApi } from "../../../api/cart/cart";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { authSelector } from "../../../redux/authReducer/authReducer";
-import { cartSelector } from "../../../redux/cartReducer/cartReducer";
+import { selectAllCartItems } from "../../../redux/cartReducer/cartReducer";
 import { clearCart } from "../../../redux/cartReducer/cartReducer";
 
 export function CartTotal() {
   const dispatch = useDispatch()
-  const cart = useSelector(cartSelector)
+  const  cart  = useSelector(selectAllCartItems)
   const { userDetail } = useSelector(authSelector)
   // Calculate total price
   const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);

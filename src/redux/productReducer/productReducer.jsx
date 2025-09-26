@@ -1,17 +1,32 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { getProductApi } from "../../api/products/products";
 
 const initialState = {
   allProducts: [],
   showProducts: [],
   searchProducts: [],
   previousSearchProducts: [],
-   filterObj: {
+  filterObj: {
     price: 75000,
     categories: {}, // {electronics: true, fashion: false}
     search: "",
   },
-// keep previous for search reset
+  isLoading: false,
+  error: null,
 };
+
+// --- Using createAsyncThunk to fetch products from API
+export const fetchProducts = createAsyncThunk(
+  "products/fetchProducts",
+  async (_, thunkAPI) => {
+    try {
+       const products = await getProductApi(); 
+      return products;    
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response?.data || "Something went wrong");
+    }
+  }
+);
 
 const productSlice = createSlice({
   name: "products",
@@ -26,7 +41,7 @@ const productSlice = createSlice({
       state.allProducts.push(action.payload);
       state.showProducts.push(action.payload);
     },
-     filterProduct: (state, action) => {
+    filterProduct: (state, action) => {
       // merge new filter values into filterObj
       state.filterObj = { ...state.filterObj, ...action.payload };
 
@@ -69,13 +84,33 @@ const productSlice = createSlice({
       }
     },
   },
+
+  // --- Handle async thunk lifecycle
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchProducts.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.allProducts = action.payload;
+        state.showProducts = action.payload;
+        state.previousSearchProducts = action.payload;
+      })
+      .addCase(fetchProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to fetch products";
+      });
+  },
 });
 
-// export actions
+// --- Export actions
 export const { getProduct, addProduct, filterProduct, search } = productSlice.actions;
 
-// selector
+// --- Selector
 export const productSelector = (state) => state.products;
 
-// export reducer
+// --- Export reducer
 export const productReducer = productSlice.reducer;

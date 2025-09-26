@@ -1,67 +1,58 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { GridLoader } from "react-spinners";
 
 import { CartTotal } from "../../component/cart/cartTotal/cartTotal";
 import { CartCard } from "../../component/cart/cartCard/cartCard";
 import "./cart.css";
-import { getCartItemApi } from "../../api/cart/cart";
+
 import { useDispatch, useSelector } from "react-redux";
 import { authSelector } from "../../redux/authReducer/authReducer";
-import { cartReducer, cartSelector } from "../../redux/cartReducer/cartReducer";
-import { getCartItem } from "../../redux/cartReducer/cartReducer";
-
+import { fetchCartItems, selectAllCartItems ,cartSelector} from "../../redux/cartReducer/cartReducer";
 
 export function CartPage() {
   const dispatch = useDispatch();
-  const  cart   = useSelector(cartSelector)
-  const {userDetail} = useSelector(authSelector)
-  const [loading, setLoading] = useState(true);
 
+  // Redux state
+  const { userDetail } = useSelector(authSelector);
+  const cartItems = useSelector(selectAllCartItems);
+  const { isLoading, error } = useSelector(cartSelector);
+
+  // Fetch cart items when userDetail.uid is available
   useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        if (!userDetail?.uid) return; // ✅ safety check
+    if (userDetail?.uid) {
+      dispatch(fetchCartItems(userDetail.uid));
+    }
+  }, [userDetail?.uid, dispatch]);
 
-        // Fetch user cart items from Firestore
-        const cartItems = await getCartItemApi(userDetail.uid);
+  // Show loader while fetching
+  if (isLoading) {
+    return (
+      <div className="spinner-container">
+        <GridLoader color="#36d7b7" loading={isLoading} size={20} />
+      </div>
+    );
+  }
 
-        // Update global cart state
-        dispatch(getCartItem(cartItems));
-      } catch (error) {
-        console.error("❌ Failed to fetch cart items:", error);
-      } finally {
-        // ✅ Stop loader regardless of success/error
-        setLoading(false);
-      }
-    };
-
-    fetchCart();
-  }, [userDetail?.uid]); // dependencies
+  // Show error if fetch failed
+  if (error) {
+    return <p style={{ color: "red" }}>Error: {error}</p>;
+  }
 
   return (
-    <>
-      {loading ? (
-        // 🔄 Show spinner while fetching cart
-        <div className="spinner-container">
-          <GridLoader color="#36d7b7" loading={loading} size={20} />
-        </div>
-      ) : (
-        <div className="cart-Container">
-          {/* 🛒 Cart Summary */}
-          <CartTotal />
+    <div className="cart-Container">
+      {/* 🛒 Cart Summary */}
+      <CartTotal />
 
-          {/* 🛍️ Cart Items */}
-          <div className="cartList">
-            {cart.length > 0 ? (
-              cart.map((cartItem) => (
-                <CartCard key={cartItem.id} item={cartItem} />
-              ))
-            ) : (
-              <h2>Your Cart is Empty 🛒</h2>
-            )}
-          </div>
-        </div>
-      )}
-    </>
+      {/* 🛍️ Cart Items */}
+      <div className="cartList">
+        {cartItems.length > 0 ? (
+          cartItems.map((cartItem) => (
+            <CartCard key={cartItem.id} item={cartItem} />
+          ))
+        ) : (
+          <h2>Your Cart is Empty 🛒</h2>
+        )}
+      </div>
+    </div>
   );
 }

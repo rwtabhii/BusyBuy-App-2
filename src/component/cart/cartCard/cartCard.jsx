@@ -1,32 +1,34 @@
-import { useDispatch, useSelector } from "react-redux";
-import { removeCartItemApi, updateCartItemApi } from "../../../api/cart/cart";
-import "./cartCard.css"
-import { cartSelector, decrementQuantity, incrementQuantity, removeCartItem } from "../../../redux/cartReducer/cartReducer";
+import { useDispatch } from "react-redux";
+import {
+  removeCartItemAsync,
+  updateCartItemAsync
+} from "../../../redux/cartReducer/cartReducer";
+import "./cartCard.css";
 
 export function CartCard({ item }) {
   const dispatch = useDispatch();
-  const cart = useSelector(cartSelector)
-  const removeFromCart = async (item) => {
-    // console.log("item is :",item);
-    await removeCartItemApi(item);
-    dispatch(removeCartItem(item))
-  }
-  const updateQuantity = async (type) => {
-    if (type === "increment") {
-      dispatch(incrementQuantity(item.id))
-      await updateCartItemApi(item.id, "increment");
-    } else if (type === "decrement") {
-      if (item.quantity === 1) {
-        dispatch(removeCartItem(item))
-        await removeCartItemApi(item);
-      } else {
-       dispatch(decrementQuantity(item.id))
-        await updateCartItemApi(item.id, "decrement");
-      }
-    }
+
+  // Remove item from cart
+  const removeFromCart = () => {
+    dispatch(removeCartItemAsync(item));
   };
 
+  // Increment / Decrement quantity
+const updateQuantity = (type) => {
+  if (type === "increment") {
+    dispatch(updateCartItemAsync({ id: item.id, type }));
+  } else if (type === "decrement") {
+    if (item.quantity === 1) {
+      // 1️⃣ Remove from state immediately
+      // dispatch(removeCartItem(item));  // optional: if you have a reducer for instant removal
 
+      // 2️⃣ Remove from DB
+      dispatch(removeCartItemAsync(item));
+    } else {
+      dispatch(updateCartItemAsync({ id: item.id, type }));
+    }
+  }
+};
   return (
     <div className="cartCard">
       <div className="imageContainer">
@@ -43,15 +45,18 @@ export function CartCard({ item }) {
           <p className="itemPrice">₹ {item.price}</p>
           <div className="itemquantity">
             <span className="decrement" onClick={() => updateQuantity("decrement")}>
-              <i className="fa-solid fa-circle-minus"></i></span>{item.quantity}
+              <i className="fa-solid fa-circle-minus"></i>
+            </span>
+            {item.quantity}
             <span className="increment" onClick={() => updateQuantity("increment")}>
-              <i className="fa-solid fa-circle-plus"></i></span>
+              <i className="fa-solid fa-circle-plus"></i>
+            </span>
           </div>
         </div>
-        <button className="removeBtn" onClick={() => removeFromCart(item)}>
+        <button className="removeBtn" onClick={removeFromCart}>
           Remove From Cart
         </button>
       </div>
-    </div >
+    </div>
   );
 }

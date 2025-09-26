@@ -1,42 +1,34 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { GridLoader } from "react-spinners";
+import { useDispatch, useSelector } from "react-redux";
 
 import { FilterProduct } from "../../component/filterProducts/filterProducts";
 import { ProductList } from "../../component/product/productList/productList";
 import "./home.css";
-import { getProductApi } from "../../api/products/products";
-import { useDispatch } from "react-redux";
-import { filterProduct, getProduct } from "../../redux/productReducer/productReducer";
+
+import { fetchProducts, filterProduct, productSelector } from "../../redux/productReducer/productReducer";
 
 export function Home() {
-  const dispatch = useDispatch()
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  
+  // Get state directly from Redux
+  const { isLoading, error } = useSelector(productSelector);
 
-  // ✅ Fetch products on initial render
+  // ✅ Fetch products on initial render using thunk
   useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const productsData = await getProductApi();
-
-        // Dispatch to context → updates global product state
-        dispatch(getProduct(productsData))
-      } catch (err) {
-        console.error("❌ Failed to fetch products:", err);
-      } finally {
-        // Always stop loading (success or error)
-        setLoading(false);
-      }
-    }
-
-    fetchProducts();
-  }, []); // dependency for safety
+    dispatch(fetchProducts());   // this triggers pending → fulfilled/rejected
+  }, [dispatch]);
 
   return (
     <div className="homecontainer">
       {/* Show spinner while fetching */}
-      {loading ? (
+      {isLoading ? (
         <div className="spinner-container">
-          <GridLoader color="#36d7b7" loading={loading} size={20} />
+          <GridLoader color="#36d7b7" loading={isLoading} size={20} />
+        </div>
+      ) : error ? (
+        <div className="error-message">
+          ❌ Failed to fetch products: {error}
         </div>
       ) : (
         <>
@@ -47,7 +39,7 @@ export function Home() {
               placeholder="Search"
               className="searchInput"
               onChange={(e) =>
-                dispatch(filterProduct({search : e.target.value}))
+                dispatch(filterProduct({ search: e.target.value }))
               }
             />
           </div>
