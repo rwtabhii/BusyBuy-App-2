@@ -17,7 +17,7 @@ export function Home() {
   // ✅ Fetch products on initial render using thunk
   useEffect(() => {
     dispatch(fetchProducts());   // this triggers pending → fulfilled/rejected
-  }, [dispatch]);
+  },[]);
 
   return (
     <div className="homecontainer">

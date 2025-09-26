@@ -10,8 +10,8 @@
 - 🛍️ **Product Listing** – Display available products with filtering and search functionality.  
 - 🛒 **Shopping Cart** – Add, remove, and update items in the cart.  
 - 📝 **Orders** – Place orders, view order history, and track purchases.  
-- 👤 **User Context** – Manage authentication state across the app using **React Context API**.  
-- 📦 **Cart Context** – Manage the cart globally without prop drilling.  
+- 👤 **User Reducer** – Manage authentication state across the app using **React Redux**.  
+- 📦 **Cart Reducer** – Manage the cart globally without prop drilling.  
 - 🎨 **Responsive UI** – Built with **React + CSS**, works on desktop and mobile.  
 - 🔔 **Notifications** – Display toast notifications for user actions using **React Toastify**.  
 
@@ -21,7 +21,7 @@
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/your-username/buybusy.git
+git clone https://github.com/rwtabhii/BusyBuy-App-2.git
 cd buybusy
 Install dependencies
 
@@ -100,7 +100,7 @@ buybusy/
 ⚡ Technologies Used
 Frontend: React, Vite, CSS
 
-State Management: React Context API, useReducer
+State Management: React Redux and Redux Toolkit , useReducer
 
 Backend/Database: Firebase Auth + Firestore
 

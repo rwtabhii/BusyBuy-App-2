@@ -1,11 +1,13 @@
 import { useRef } from "react";
 import { toast } from "react-toastify";
-import { registerUser } from "../../api/users/users";
 import "./registerPage.css";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { registerUserAsync } from "../../redux/authReducer/authReducer";
 
 export function RegisterPage({ onSubmitHandler, loading }) {
   // Refs for form input fields (avoids controlled components boilerplate)
+  const dispatch = useDispatch()
   const nameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -22,21 +24,17 @@ export function RegisterPage({ onSubmitHandler, loading }) {
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
 
-    try {
-      // API call → register user
-      await registerUser({ name, email, password });
-
-      // Show success toast
-      toast.success("Signup successful!");
-
-      // Redirect user to Login page
-      navigate("/login");
-    } catch (err) {
-      console.error(err);
-
-      // Show error toast
-      toast.error("Signup failed!");
-    }
+    // API call → register user
+   dispatch( registerUserAsync({ name, email, password }))
+      .unwrap()
+      .then(() => {
+        toast.success("Signup successful!");
+        navigate("/login");
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error("Signup failed!");
+      });
   };
 
   return (
@@ -73,7 +71,7 @@ export function RegisterPage({ onSubmitHandler, loading }) {
         />
 
         {/* Submit button (shows loader state if loading) */}
-        <button className="loginBtn" type="submit">
+        <button className="loginBtn" type="submit" >
           {loading ? "..." : "Sign Up"}
         </button>
       </form>

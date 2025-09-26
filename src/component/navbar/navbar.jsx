@@ -2,7 +2,7 @@ import { NavLink, Link, useNavigate } from "react-router-dom";
 import "./navbar.css";
 import appLogo from "../../assets/applogo.png";
 import { useDispatch, useSelector } from "react-redux";
-import { authSelector } from "../../redux/authReducer/authReducer";
+import { authSelector, logout } from "../../redux/authReducer/authReducer";
 import { setLogin } from "../../redux/authReducer/authReducer";
 
 export function Navbar() {
@@ -10,8 +10,9 @@ export function Navbar() {
     const {login} = useSelector(authSelector)
     const dispatch = useDispatch()
 
+  console.log(login);
     const userLogout = () => {
-        dispatch(setLogin(false));
+        dispatch(logout(false))
     };
 
     return (
